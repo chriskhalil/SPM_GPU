@@ -8,6 +8,9 @@
 #include "matrix.h"
 #include "timer.h"
 
+//added
+#include "Utility.cuh"
+
 void spmspm_cpu(CSRMatrix* csrMatrix1, CSRMatrix* csrMatrix2, COOMatrix* cooMatrix) {
     float* outputValues = (float*) malloc(csrMatrix2->numCols*sizeof(float));
     memset(outputValues, 0, csrMatrix2->numCols*sizeof(float));
@@ -74,6 +77,10 @@ void verify(COOMatrix* cooMatrixGPU, COOMatrix* cooMatrixCPU, unsigned int quick
 int main(int argc, char**argv) {
 
     cudaDeviceSynchronize();
+
+    //Query Gpu
+    auto& gpu_info = GpuConfig::GetInstance();
+
     setbuf(stdout, NULL);
 
     // Parse arguments
@@ -115,6 +122,7 @@ int main(int argc, char**argv) {
     printElapsedTime(timer, "    CPU time", CYAN);
 
     if(runGPUVersion0 || runGPUVersion1 || runGPUVersion2 || runGPUVersion3 || runGPUVersion4) {
+
 
         // Allocate GPU memory
         startTime(&timer);
@@ -168,7 +176,7 @@ int main(int argc, char**argv) {
 
             // Compute on GPU with version 1
             startTime(&timer);
-            spmspm_gpu1(csrMatrix, csrMatrix, csrMatrix_d, csrMatrix_d, cooMatrix_d);
+            spmspm_gpu1(csrMatrix, csrMatrix, csrMatrix_d, csrMatrix_d, cooMatrix_d,const GpuConfig& gpu_info);
             cudaDeviceSynchronize();
             stopTime(&timer);
             printElapsedTime(timer, "    GPU kernel time (version 1)", GREEN);
@@ -195,7 +203,7 @@ int main(int argc, char**argv) {
 
             // Compute on GPU with version 2
             startTime(&timer);
-            spmspm_gpu2(csrMatrix, csrMatrix, csrMatrix_d, csrMatrix_d, cooMatrix_d);
+            spmspm_gpu2(csrMatrix, csrMatrix, csrMatrix_d, csrMatrix_d, cooMatrix_d, const GpuConfig& gpu_info);
             cudaDeviceSynchronize();
             stopTime(&timer);
             printElapsedTime(timer, "    GPU kernel time (version 2)", GREEN);
@@ -222,7 +230,7 @@ int main(int argc, char**argv) {
 
             // Compute on GPU with version 3
             startTime(&timer);
-            spmspm_gpu3(csrMatrix, csrMatrix, csrMatrix_d, csrMatrix_d, cooMatrix_d);
+            spmspm_gpu3(csrMatrix, csrMatrix, csrMatrix_d, csrMatrix_d, cooMatrix_d, const GpuConfig & gpu_info);
             cudaDeviceSynchronize();
             stopTime(&timer);
             printElapsedTime(timer, "    GPU kernel time (version 3)", GREEN);
@@ -249,7 +257,7 @@ int main(int argc, char**argv) {
 
             // Compute on GPU with version 4
             startTime(&timer);
-            spmspm_gpu4(csrMatrix, csrMatrix, csrMatrix_d, csrMatrix_d, cooMatrix_d);
+            spmspm_gpu4(csrMatrix, csrMatrix, csrMatrix_d, csrMatrix_d, cooMatrix_d, const GpuConfig& gpu_info);
             cudaDeviceSynchronize();
             stopTime(&timer);
             printElapsedTime(timer, "    GPU kernel time (version 4)", GREEN);
