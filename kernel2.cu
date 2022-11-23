@@ -60,8 +60,9 @@ __global__ void spmspm_gpu2_d(CSRMatrix* csrMatrix1, CSRMatrix* csrMatrix2, COOM
 
 void spmspm_gpu2(CSRMatrix* csrMatrix1, CSRMatrix* csrMatrix2, CSRMatrix* csrMatrix1_d, CSRMatrix* csrMatrix2_d, COOMatrix* cooMatrix_d, const GpuConfig& gpu_info) {
     static unsigned int numThreadsPerBlock = THREADS_PER_BLOCK;
-    static unsigned int numBlocks = 170;
-
+    int numSM = gpu_info.MultiprocessorCount();
+    static unsigned int numBlocks = 2*numSM;
+    
     // create a row for every block
     float* blockArrays_d;
     cudaMalloc((void**) &blockArrays_d, numBlocks * csrMatrix2->numCols * sizeof(float));
