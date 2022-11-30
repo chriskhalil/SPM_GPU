@@ -9,7 +9,7 @@ module load gcc/10.1.0<br>
 Progress:<br>
 GPU0: Done<br>
 GPU1: BUGS (Assigned Charbel)<br>
-GPU2: TODO<br>
+GPU2: DONE -- Optimized<br>
 GPU3: TODO<br>
 GPU4: TODO<br>
 <br>
