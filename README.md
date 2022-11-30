@@ -15,4 +15,4 @@ GPU4: TODO<br>
 <br>
 <br>
 Our Results for matrix 3  (126 ms)<br>
-![plot](Results.png)
+![Results.png](https://github.com/chriskhalil/SPM_GPU/blob/28f30831a0deb00317e76b385c3ea65616f6ff1d/Results.png)
