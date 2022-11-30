@@ -15,4 +15,4 @@ GPU4: TODO<br>
 <br>
 <br>
 Our Results for matrix 3  (126 ms)<br>
-![plot](Results.png)
+![alt text](Results.png)
