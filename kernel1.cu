@@ -4,7 +4,7 @@
 
 
 #define THREADS_PER_BLOCK 1024
-#define SM_FACTOR 1
+#define SM_FACTOR 5
 #define SM_SIZE THREADS_PER_BLOCK*SM_FACTOR
 
 __global__ void spmspm_gpu1_d(CSRMatrix* csrMatrix1, CSRMatrix* csrMatrix2, COOMatrix* cooMatrix) {
@@ -40,7 +40,7 @@ __global__ void spmspm_gpu1_d(CSRMatrix* csrMatrix1, CSRMatrix* csrMatrix2, COOM
 
                     unsigned int col = csrMatrix1->colIdxs[i];
                     float value = csrMatrix1->values[i];
-                    outputValues[col%SM_SIZE] += value*theValue;
+                    outputValues[col-(SM_SIZE*stride)] += value*theValue;
 
                 }
 
