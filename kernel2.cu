@@ -8,15 +8,15 @@ __device__ unsigned int counter_global = 0;
 __global__ void spmspm_gpu2_d(CSRMatrix* csrMatrix1, CSRMatrix* csrMatrix2, COOMatrix* cooMatrix, float * blockArrays, float * columnArrays){
     unsigned int numCols2 = csrMatrix2->numCols; // nuumber of coloumns in the second matrix
     __shared__ unsigned int row1;
-    // initialize the counter
     __shared__ unsigned int counter;
     
-    // initialize array to 0's
+    // initialize arrays to 0's
     for (int y = threadIdx.x; y < numCols2; y += blockDim.x){ // initialize shared array to be 0
         blockArrays[blockIdx.x*numCols2 + threadIdx.x] = 0.0f;
         columnArrays[blockIdx.x*numCols2 + threadIdx.x] = 0.0f;
     }
 
+    // initialize counter to 0 and reserve a row to work on
     if(threadIdx.x == 0){
         row1 = atomicAdd(&counter_global, 1);
         counter = 0;
@@ -83,4 +83,5 @@ void spmspm_gpu2(CSRMatrix* csrMatrix1, CSRMatrix* csrMatrix2, CSRMatrix* csrMat
     spmspm_gpu2_d <<<numBlocks, numThreadsPerBlock>>> (csrMatrix1_d, csrMatrix2_d, cooMatrix_d, blockArrays_d, columnArrays_d);
 
     cudaFree(blockArrays_d);
+    cudaFree(columnArrays_d);
 }
