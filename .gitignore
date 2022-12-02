@@ -2,3 +2,5 @@ ipch/
 *.jfm
 *.opendb
 *.opensdf
+*.o
+spmspm
